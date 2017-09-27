@@ -129,7 +129,7 @@ CKEDITOR.MmsAutosavePlugin =
 
             editorInstance.config.autosave_timeOutId = null;
         }
-    };
+    }
 
     // localStorage detection
     function supportsLocalStorage() {
@@ -270,18 +270,10 @@ CKEDITOR.MmsAutosavePlugin =
 
         var compressedJSON = LZString.compressToUTF16(JSON.stringify({ data: editorInstance.getData(), saveTime: new Date() }));
 
-        var quotaExceeded = false;
-
-        try {
-            localStorage.setItem(autoSaveKey, compressedJSON);
-        } catch (e) {
-            quotaExceeded = isQuotaExceeded(e);
-            if (quotaExceeded) {
-                console.log(editorInstance.lang.autosave.localStorageFull);
-            }
-        }
+        var quotaExceeded = _trySavingContentToLocalStorage(localStorage, moment, LZString, config.NotOlderThen, autoSaveKey, compressedJSON);
 
         if (quotaExceeded) {
+            console.log(editorInstance.lang.autosave.localStorageFull);
             var notificationError = new CKEDITOR.plugins.notification(editorInstance, { message: editorInstance.lang.autosave.localStorageFull, type: 'warning' });
             notificationError.show();
         } else {
