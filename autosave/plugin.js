@@ -18,6 +18,9 @@ CKEDITOR.MmsAutosavePlugin =
         requires: 'notification',
         version: "0.18.0",
         init: function (editor) {
+            if ( !editor.config.autosave.enableAutosave ) {
+                return;
+            }
 
             // Look for autosave from config.js - this is a bit redundant but necessary
             editor.config.autosave = 'autosave' in editor.config ? editor.config.autosave : {};
