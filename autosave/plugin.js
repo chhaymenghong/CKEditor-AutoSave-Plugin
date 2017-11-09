@@ -276,7 +276,11 @@ CKEDITOR.MmsAutosavePlugin =
 
         $('#autosave-confirm').unbind('click').click(function() {
             autosaveModal.css('display', 'none');
-            editorInstance.openDialog('autosaveDialog');
+            var dialog = editorInstance.openDialog('autosaveDialog');
+            // for styling the dialog 
+            var dialogDom = dialog.getElement()['$'];
+            var contentDom = $(dialogDom).children(":first");
+            contentDom.addClass('autosave');
         });
         $('#autosave-cancel').unbind('click').click(function() {
             RemoveStorage(autoSaveKey, editorInstance);
