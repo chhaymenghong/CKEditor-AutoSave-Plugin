@@ -277,7 +277,7 @@ CKEDITOR.MmsAutosavePlugin =
         $('#autosave-confirm').unbind('click').click(function() {
             autosaveModal.css('display', 'none');
             var dialog = editorInstance.openDialog('autosaveDialog');
-            // for styling the dialog 
+            // for styling the dialog
             var dialogDom = dialog.getElement()['$'];
             var contentDom = $(dialogDom).children(":first");
             contentDom.addClass('autosave');
@@ -341,8 +341,21 @@ CKEDITOR.MmsAutosavePlugin =
                     }, 2000);
                 }
             } else if (messageType == "notification") {
-                var notification = new CKEDITOR.plugins.notification(editorInstance, { message: editorInstance.lang.autosave.autoSaveMessage, type: 'success' });
+                var notification = new CKEDITOR.plugins.notification(editorInstance,{message:editorInstance.lang.autosave.autoSaveMessage,type:'success',duration:5000});
                 notification.show();
+
+                // Allow changing style for "autosave" popup
+                var editorElement = $(editorInstance.container['$']);
+                editorElement.css('position', 'relative');
+                var autosavePopupElement = $('#' + notification.id);
+                autosavePopupElement.appendTo(editorElement);
+                autosavePopupElement.css({
+                    position: 'absolute'
+                });
+                autosavePopupElement.css({
+                    left: editorElement.outerWidth(true) - autosavePopupElement.outerWidth(true),
+                    top: editorElement.outerHeight(true) - autosavePopupElement.outerHeight(true)
+                });
             }
         }
     }
