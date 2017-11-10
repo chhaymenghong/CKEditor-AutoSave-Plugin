@@ -267,17 +267,16 @@ CKEDITOR.MmsAutosavePlugin =
         var autosaveMessageId = 'autosaveMessage';
         var autosaveModal = $('#' + autosaveModalId);
         if ( autosaveModal.length) {
-            autosaveModal.find('#' + autosaveMessageId).text(confirmMessage);
+            autosaveModal.find('#' + autosaveMessageId).html(confirmMessage);
         } else {
-            var dialogDom = _createDialogHtml(confirmMessage, autosaveModalId, autosaveMessageId );
-            $(dialogDom).appendTo('body');
+            var dialogDom = _createDialogDom(confirmMessage, autosaveModalId, autosaveMessageId );
+            dialogDom.appendTo('body');
             autosaveModal = $('#' + autosaveModalId);
         }
 
         $('#autosave-confirm').unbind('click').click(function() {
             autosaveModal.css('display', 'none');
             var dialog = editorInstance.openDialog('autosaveDialog');
-            // for styling the dialog
             var dialogDom = dialog.getElement()['$'];
             var contentDom = $(dialogDom).children(":first");
             contentDom.addClass('autosave');
@@ -289,23 +288,25 @@ CKEDITOR.MmsAutosavePlugin =
         autosaveModal.css('display', 'block');
     }
 
-    function _createDialogHtml(message, autosaveModalId, autosaveMessageId) {
+    function _createDialogDom(message, autosaveModalId, autosaveMessageId) {
         var dialogHtml =
             '<div id=\"'+ autosaveModalId + '\" class="modal autosave">\n' +
             '    <div class="modal-content autosave">\n' +
             '        <div class="modal-header">\n' +
-            '            <h1>Do you want to load autosave content?</h1>\n' +
+            '            <h4>Recovered Version Found <a href="https://opencae.jpl.nasa.gov/alfresco/mmsapp/mms.html#/projects/PROJECT-ID_10_15_15_1_41_52_PM_5b84f7be_1506a83819c__6bce_cae_tw_jpl_nasa_gov_128_149_19_85/master/documents/_18_0_2_8630260_1446850132083_177552_51111/views/MMS_1506985433518_b5775631-5dce-484b-abea-2f4860a23b36" target="_blank"><i class="fa fa-info-circle" aria-hidden="true"></i></a></h4>\n' +
             '        </div>\n' +
             '        <div class="modal-body">\n' +
-            '            <p id=\"'+ autosaveMessageId + '\">'+ message +'</p>\n' +
+            '            <p id=\"'+ autosaveMessageId + '\"></p>\n' +
             '        </div>\n' +
             '        <div class="modal-footer">\n' +
-            '                <button id="autosave-confirm" class="btn btn-primary">Confirm</button>\n' +
-            '                <button id="autosave-cancel" class="btn btn-secondary">Cancel</button>\n' +
+            '                <button id="autosave-confirm" class="btn btn-primary">Review</button>\n' +
+            '                <button id="autosave-cancel" class="btn btn-tertiary">Discard</button>\n' +
             '        </div>\n' +
             '    </div>\n' +
             '</div>';
-        return $(dialogHtml);
+        var dialogDom = $(dialogHtml);
+        dialogDom.find('#' + autosaveMessageId).html(message);
+        return dialogDom
     }
 
     function LoadData(autoSaveKey) {
